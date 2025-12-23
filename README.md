@@ -118,35 +118,32 @@ Follow these instructions to get the project up and running on your local machin
 
 ---
 
-### Option 1: Backend Setup
+
 ```bash
 cd backend
 npm install
 npm run dev
-
 Option 2: Frontend Setup
-```bash
+bash
+
 cd frontend
 npm install
 npm start
-
 Environment Configuration
 Create a .env file in the backend directory:
-```bash
+
 env
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
-
-```bash
-
-
+```
 API Endpoints
-Endpoint	Method	Auth Required	Request Body (JSON)	Description & Key Logic
-/api/register	POST	❌ No	{"email": "...", "password": "..."}	Registers a new user account.
-/api/login	POST	❌ No	{"email": "...", "password": "..."}	Authenticates user and returns a JWT token.
-/api/balance	GET	✅ Yes	None	Fetches current wallet balance.
-/api/transfer	POST	✅ Yes	{"receiverEmail": "...", "amount": number}	Performs an atomic money transfer.
-/api/transactions	GET	✅ Yes	None	Fetches transaction history for the user.
+| Endpoint           | Method | Auth Required | Request Body (JSON)                        | Description & Key Logic                     |
+|-------------------|--------|---------------|-------------------------------------------|--------------------------------------------|
+| /api/register      | POST   | ❌ No         | {"email": "...", "password": "..."}       | Registers a new user account.              |
+| /api/login         | POST   | ❌ No         | {"email": "...", "password": "..."}       | Authenticates user and returns a JWT token.|
+| /api/balance       | GET    | ✅ Yes        | None                                      | Fetches current wallet balance.            |
+| /api/transfer      | POST   | ✅ Yes        | {"receiverEmail": "...", "amount": number}| Performs an atomic money transfer.         |
+| /api/transactions  | GET    | ✅ Yes        | None                                      | Fetches transaction history for the user. |
 
 AI USAGE LOG
 1. Backend Transaction Logic
@@ -192,4 +189,5 @@ Helped structure and refine project documentation.
 Ensured clarity, assignment compliance, and readability.
 
 Thank you!
+
 
