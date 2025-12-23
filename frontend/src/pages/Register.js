@@ -5,10 +5,11 @@ function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // UI States for hover/focus effects
+    // UI States
     const [focusedInput, setFocusedInput] = useState(null);
     const [isButtonHovered, setIsButtonHovered] = useState(false);
 
@@ -17,6 +18,17 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+
+        // 🔒 PASSWORD VALIDATION LOGIC
+        if (password.length < 5) {
+            setError('Password must be at least 5 characters long');
+            return;
+        }
+        if (!/\d/.test(password)) {
+            setError('Password must contain at least one number');
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -34,7 +46,6 @@ function Register() {
                 return;
             }
 
-            // Redirect to login after successful registration
             navigate('/login');
 
         } catch (err) {
@@ -44,19 +55,19 @@ function Register() {
         }
     };
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
         <div style={styles.container}>
             <div style={styles.card}>
-
-                {/* Header Section */}
                 <div style={styles.header}>
                     <h2 style={styles.title}>Create an Account</h2>
                     <p style={styles.subtitle}>Join us to get started with your journey.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} style={styles.form}>
-                    
-                    {/* Name Input */}
                     <div style={styles.inputGroup}>
                         <label style={styles.label}>Full Name</label>
                         <input
@@ -75,7 +86,6 @@ function Register() {
                         />
                     </div>
 
-                    {/* Email Input */}
                     <div style={styles.inputGroup}>
                         <label style={styles.label}>Email Address</label>
                         <input
@@ -94,26 +104,38 @@ function Register() {
                         />
                     </div>
 
-                    {/* Password Input */}
                     <div style={styles.inputGroup}>
                         <label style={styles.label}>Password</label>
-                        <input
-                            type="password"
-                            placeholder="Create a strong password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            style={{
-                                ...styles.input,
-                                border: focusedInput === 'password' ? '1px solid #2563eb' : '1px solid #e2e8f0',
-                                boxShadow: focusedInput === 'password' ? '0 0 0 3px rgba(37, 99, 235, 0.1)' : 'none'
-                            }}
-                            onFocus={() => setFocusedInput('password')}
-                            onBlur={() => setFocusedInput(null)}
-                        />
+                        <div style={styles.passwordWrapper}>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Must include minimum 5 characters and 1 number"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                style={{
+                                    ...styles.input,
+                                    width: '100%',
+                                    border: focusedInput === 'password' ? '1px solid #2563eb' : '1px solid #e2e8f0',
+                                    boxShadow: focusedInput === 'password' ? '0 0 0 3px rgba(37, 99, 235, 0.1)' : 'none'
+                                }}
+                                onFocus={() => setFocusedInput('password')}
+                                onBlur={() => setFocusedInput(null)}
+                            />
+                             <button 
+                                type="button" 
+                                onClick={togglePasswordVisibility} 
+                                style={styles.eyeButton}
+                            >
+                                {showPassword ? (
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                                ) : (
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                )}
+                            </button>
+                        </div>
                     </div>
 
-                    {/* Error Message */}
                     {error && (
                         <div style={styles.errorContainer}>
                             <span style={styles.errorIcon}>⚠️</span>
@@ -121,7 +143,6 @@ function Register() {
                         </div>
                     )}
 
-                    {/* Submit Button */}
                     <button
                         type="submit"
                         disabled={loading}
@@ -136,7 +157,6 @@ function Register() {
                         {loading ? 'Creating Account...' : 'Sign Up'}
                     </button>
 
-                    {/* Footer / Login Link */}
                     <div style={styles.footer}>
                         <p style={styles.footerText}>
                             Already have an account?{' '}
@@ -151,108 +171,25 @@ function Register() {
     );
 }
 
-// 🎨 Styles (Matches Login.js exactly for consistency)
 const styles = {
-    container: {
-        height: '100vh',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: 'linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%)',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    },
-    card: {
-        width: '100%',
-        maxWidth: '400px',
-        padding: '40px',
-        background: '#ffffff',
-        borderRadius: '16px',
-        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)',
-        margin: '20px',
-    },
-    header: {
-        textAlign: 'center',
-        marginBottom: '32px',
-    },
-    title: {
-        fontSize: '24px',
-        fontWeight: '700',
-        color: '#1e293b',
-        marginBottom: '8px',
-    },
-    subtitle: {
-        fontSize: '14px',
-        color: '#64748b',
-        margin: 0,
-    },
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '20px',
-    },
-    inputGroup: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '6px',
-    },
-    label: {
-        fontSize: '14px',
-        fontWeight: '500',
-        color: '#334155',
-    },
-    input: {
-        padding: '12px 16px',
-        borderRadius: '8px',
-        fontSize: '14px',
-        outline: 'none',
-        transition: 'all 0.2s ease',
-        color: '#1e293b',
-        backgroundColor: '#f8fafc',
-    },
-    button: {
-        padding: '12px',
-        marginTop: '10px',
-        color: '#ffffff',
-        border: 'none',
-        borderRadius: '8px',
-        fontSize: '16px',
-        fontWeight: '600',
-        cursor: 'pointer',
-        transition: 'all 0.2s ease',
-        boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)',
-    },
-    errorContainer: {
-        background: '#fef2f2',
-        border: '1px solid #fecaca',
-        borderRadius: '6px',
-        padding: '10px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-    },
-    errorIcon: {
-        fontSize: '14px',
-    },
-    errorText: {
-        color: '#dc2626',
-        fontSize: '13px',
-        margin: 0,
-    },
-    footer: {
-        textAlign: 'center',
-        marginTop: '16px',
-    },
-    footerText: {
-        fontSize: '14px',
-        color: '#64748b',
-    },
-    link: {
-        color: '#2563eb',
-        fontWeight: '600',
-        textDecoration: 'none',
-        transition: 'color 0.2s',
-    }
+    container: { height: '100vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%)', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' },
+    card: { width: '100%', maxWidth: '400px', padding: '40px', background: '#ffffff', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)', margin: '20px' },
+    header: { textAlign: 'center', marginBottom: '32px' },
+    title: { fontSize: '24px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' },
+    subtitle: { fontSize: '14px', color: '#64748b', margin: 0 },
+    form: { display: 'flex', flexDirection: 'column', gap: '20px' },
+    inputGroup: { display: 'flex', flexDirection: 'column', gap: '6px' },
+    label: { fontSize: '14px', fontWeight: '500', color: '#334155' },
+    passwordWrapper: { position: 'relative', display: 'flex', alignItems: 'center' },
+    input: { padding: '12px 16px', borderRadius: '8px', fontSize: '14px', outline: 'none', transition: 'all 0.2s ease', color: '#1e293b', backgroundColor: '#f8fafc', width: '100%', boxSizing: 'border-box' },
+    eyeButton: { position: 'absolute', right: '12px', background: 'none', border: 'none', cursor: 'pointer', padding: '0', display: 'flex', alignItems: 'center' },
+    button: { padding: '12px', marginTop: '10px', color: '#ffffff', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s ease', boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)' },
+    errorContainer: { background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', padding: '10px', display: 'flex', alignItems: 'center', gap: '8px' },
+    errorIcon: { fontSize: '14px' },
+    errorText: { color: '#dc2626', fontSize: '13px', margin: 0 },
+    footer: { textAlign: 'center', marginTop: '16px' },
+    footerText: { fontSize: '14px', color: '#64748b' },
+    link: { color: '#2563eb', fontWeight: '600', textDecoration: 'none', transition: 'color 0.2s' }
 };
 
 export default Register;

@@ -22,6 +22,18 @@ function Dashboard() {
     // 🔹 Sorting State
     const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
 
+    // 🔹 Helper: Generate a unique 4-digit number from the email
+    // This ensures every user gets a different, consistent card number
+    const getCardLast4 = (email) => {
+        if (!email) return '0000';
+        let hash = 0;
+        for (let i = 0; i < email.length; i++) {
+            hash = email.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        // Ensure positive number and take last 4 digits
+        return (Math.abs(hash) % 10000).toString().padStart(4, '0');
+    };
+
     // 🔹 Fetch Data
     const fetchData = async () => {
         try {
@@ -145,7 +157,7 @@ function Dashboard() {
                             </div>
                             <div style={styles.cardBottom}>
                                 <p style={styles.cardNumber}>
-                                    <span>****</span> <span>****</span> <span>****</span> <span>4582</span>
+                                    <span>****</span> <span>****</span> <span>****</span> <span>{getCardLast4(userEmail)}</span>
                                 </p>
                                 <div style={styles.cardFooterInfo}>
                                     <div style={styles.cardHolderInfo}>
@@ -310,22 +322,22 @@ const styles = {
     cardMiddle: { marginTop: '20px' },
     cardLabel: { fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.5px', opacity: 0.7, fontFamily: 'sans-serif' },
     
-    // ✨ Updated Readable Numbers Font
+    // ✨ Readable Numbers Font
     balanceText: { 
         fontSize: '36px', 
         fontWeight: '600', 
         margin: '5px 0 0 0', 
-        fontFamily: '"Source Code Pro", "Consolas", "Courier New", monospace', // Readable Font
+        fontFamily: '"Source Code Pro", "Consolas", "Courier New", monospace',
         letterSpacing: '-1px',
         textShadow: '0 2px 4px rgba(0,0,0,0.3)' 
     },
     
     cardBottom: { marginTop: '30px' },
     
-    // ✨ Updated Readable Numbers Font
+    // ✨ Readable Numbers Font
     cardNumber: { 
         fontSize: '24px', 
-        fontFamily: '"Source Code Pro", "Consolas", "Courier New", monospace', // Readable Font
+        fontFamily: '"Source Code Pro", "Consolas", "Courier New", monospace',
         letterSpacing: '4px', 
         fontWeight: '500', 
         marginBottom: '20px', 
@@ -342,7 +354,7 @@ const styles = {
     circle1: { width: '30px', height: '30px', background: 'rgba(255, 0, 0, 0.8)', borderRadius: '50%', position: 'absolute', left: 0 },
     circle2: { width: '30px', height: '30px', background: 'rgba(255, 165, 0, 0.8)', borderRadius: '50%', position: 'absolute', right: 0, mixBlendMode: 'screen' },
 
-    // 📋 TABLE CONTAINER STYLES
+    // 📋 TABLE STYLES
     whiteCard: { background: 'rgba(255, 255, 255, 0.8)', backdropFilter: 'blur(20px)', borderRadius: '30px', padding: '40px', border: '1px solid #ffffff', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)' },
     whiteCardFull: { 
         background: 'rgba(255, 255, 255, 0.8)', 
@@ -361,8 +373,8 @@ const styles = {
     tableContainer: { 
         overflowX: 'auto', 
         border: '1px solid #e2e8f0', 
-        borderRadius: '12px',
-        background: '#fff'
+        borderRadius: '12px', 
+        background: '#fff' 
     },
     table: { 
         width: '100%', 
