@@ -123,19 +123,23 @@ Follow these instructions to get the project up and running on your local machin
 cd backend
 npm install
 npm run dev
+
 Option 2: Frontend Setup
-bash
-Copy code
+```bash
 cd frontend
 npm install
 npm start
+
 Environment Configuration
 Create a .env file in the backend directory:
-
+```bash
 env
-Copy code
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+
+```bash
+
+
 API Endpoints
 Endpoint	Method	Auth Required	Request Body (JSON)	Description & Key Logic
 /api/register	POST	❌ No	{"email": "...", "password": "..."}	Registers a new user account.
