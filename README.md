@@ -24,7 +24,7 @@ The core focus of this system is transaction safety and data consistency. Specif
 Instead of numeric user IDs, the system uses email addresses (Gmail IDs) as unique identifiers, mirroring real-world digital payment systems.
 
 ## GitHub Link:
-https://github.com/your-username/lenden-assignment
+https://github.com/Eepsita12/PaySecure
 
 ---
 
